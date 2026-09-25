@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Ticket #{{ ticket.ticket_id }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+  <a class="back-link" href="{{ url_for('index') }}">&larr; All tickets</a>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, msg in messages %}
+      <div class="flash {{ category }}">{{ msg }}</div>
+    {% endfor %}
+  {% endwith %}
+
+  <div class="card">
+    <h1>#{{ ticket.ticket_id }} — {{ ticket.title }}</h1>
+    <p class="muted">
+      Created by {{ ticket.created_by }} on {{ ticket.created_at.strftime('%Y-%m-%d %H:%M') }}
+      &middot; priority: {{ ticket.priority }}
+      {% if ticket.category %}&middot; category: {{ ticket.category }}{% endif %}
+    </p>
+    <span class="badge {{ ticket.status }}">{{ ticket.status }}</span>
+
+    <form method="POST" action="{{ url_for('update_status', ticket_id=ticket.ticket_id) }}" style="margin-top:1rem;">
+      <label>Update status</label>
+      <select name="status">
+        {% for s in statuses %}
+          <option value="{{ s }}" {{ 'selected' if s == ticket.status }}>{{ s }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit">Update status</button>
+    </form>
+
+    <form method="POST" action="{{ url_for('delete_ticket', ticket_id=ticket.ticket_id) }}"
+          onsubmit="return confirm('Delete ticket #{{ ticket.ticket_id }}? This cannot be undone.');"
+          style="margin-top:.75rem;">
+      <button type="submit" class="danger">Delete ticket</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>Messages</h2>
+    {% for m in messages %}
+      <div class="message">
+        <div class="meta">{{ m.author }} &middot; {{ m.created_at.strftime('%Y-%m-%d %H:%M') }}</div>
+        <div>{{ m.message_text }}</div>
+      </div>
+    {% else %}
+      <p class="muted">No messages yet.</p>
+    {% endfor %}
+
+    <form method="POST" action="{{ url_for('add_message', ticket_id=ticket.ticket_id) }}" style="margin-top:1rem;">
+      <label>Your name / email</label>
+      <input type="text" name="author" required>
+      <label>Message</label>
+      <textarea name="message_text" rows="3" required></textarea>
+      <button type="submit">Add message</button>
+    </form>
+  </div>
+</div>
+</body>
+</html>
