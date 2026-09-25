@@ -76,4 +76,4 @@ databricks apps deploy support-ticket-app --source-code-path /Workspace/Users/<y
   and optimized for scanning large volumes of historical data for aggregation/BI, not for
   single-row transactional updates.
 - **What I'd add next:** _(your answer, e.g. ticket assignment to a specific agent,
-  email notifications on new messages, full-text search across tickets)_
+  email notifications on new messages, full-text search across tickets)
