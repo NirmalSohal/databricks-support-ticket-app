@@ -1,149 +1,199 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" preserveAspectRatio="xMidYMax meet">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMax meet">
   <style>
-    .headlight-left { animation: rgbHL 6s ease-in-out infinite; }
-    .headlight-right { animation: rgbHR 6s ease-in-out infinite; }
-    .headlight-aura-left { animation: rgbAuraL 6s ease-in-out infinite; }
-    .headlight-aura-right { animation: rgbAuraR 6s ease-in-out infinite; }
-    .headlight-glow-left { animation: rgbGlowL 6s ease-in-out infinite; }
-    .headlight-glow-right { animation: rgbGlowR 6s ease-in-out infinite; }
-    @keyframes rgbHL {
-      0%   { fill: #ff006e; }
-      20%  { fill: #8338ec; }
+    .taillight-left { animation: rgbTailL 7s ease-in-out infinite; }
+    .taillight-right { animation: rgbTailR 7s ease-in-out infinite; }
+    .taillight-inner-left { animation: rgbInnerL 7s ease-in-out infinite; }
+    .taillight-inner-right { animation: rgbInnerR 7s ease-in-out infinite; }
+    .taillight-glow-left { animation: rgbGlowL 7s ease-in-out infinite; }
+    .taillight-glow-right { animation: rgbGlowR 7s ease-in-out infinite; }
+    .fog-left, .fog-right { animation: rgbFog 7s ease-in-out infinite; }
+    @keyframes rgbTailL {
+      0%   { fill: #ff0040; }
+      20%  { fill: #ff006e; }
+      40%  { fill: #8338ec; }
+      60%  { fill: #3a86ff; }
+      80%  { fill: #ff3b30; }
+      100% { fill: #ff0040; }
+    }
+    @keyframes rgbTailR {
+      0%   { fill: #ff3b30; }
+      20%  { fill: #ff006e; }
       40%  { fill: #3a86ff; }
-      60%  { fill: #06d6a0; }
-      80%  { fill: #ffbe0b; }
-      100% { fill: #ff006e; }
+      60%  { fill: #8338ec; }
+      80%  { fill: #ff0040; }
+      100% { fill: #ff3b30; }
     }
-    @keyframes rgbHR {
-      0%   { fill: #3a86ff; }
-      20%  { fill: #06d6a0; }
-      40%  { fill: #ffbe0b; }
-      60%  { fill: #ff006e; }
-      80%  { fill: #8338ec; }
-      100% { fill: #3a86ff; }
+    @keyframes rgbInnerL {
+      0%   { fill: #ff4060; opacity: 0.8; }
+      25%  { fill: #ff3380; opacity: 0.9; }
+      50%  { fill: #9966ff; opacity: 0.8; }
+      75%  { fill: #6699ff; opacity: 0.9; }
+      100% { fill: #ff4060; opacity: 0.8; }
     }
-    @keyframes rgbAuraL {
-      0%   { fill: #ff006e; opacity: 0.04; }
-      25%  { fill: #8338ec; opacity: 0.08; }
-      50%  { fill: #3a86ff; opacity: 0.04; }
-      75%  { fill: #06d6a0; opacity: 0.08; }
-      100% { fill: #ff006e; opacity: 0.04; }
-    }
-    @keyframes rgbAuraR {
-      0%   { fill: #3a86ff; opacity: 0.04; }
-      25%  { fill: #06d6a0; opacity: 0.08; }
-      50%  { fill: #ffbe0b; opacity: 0.04; }
-      75%  { fill: #ff006e; opacity: 0.08; }
-      100% { fill: #3a86ff; opacity: 0.04; }
+    @keyframes rgbInnerR {
+      0%   { fill: #ff6050; opacity: 0.8; }
+      25%  { fill: #ff3380; opacity: 0.9; }
+      50%  { fill: #6699ff; opacity: 0.8; }
+      75%  { fill: #9966ff; opacity: 0.9; }
+      100% { fill: #ff6050; opacity: 0.8; }
     }
     @keyframes rgbGlowL {
-      0%   { stroke: #ff006e; }
-      25%  { stroke: #8338ec; }
-      50%  { stroke: #3a86ff; }
-      75%  { stroke: #06d6a0; }
-      100% { stroke: #ff006e; }
+      0%   { fill: #ff0040; opacity: 0.15; }
+      25%  { fill: #ff006e; opacity: 0.2; }
+      50%  { fill: #8338ec; opacity: 0.15; }
+      75%  { fill: #3a86ff; opacity: 0.2; }
+      100% { fill: #ff0040; opacity: 0.15; }
     }
     @keyframes rgbGlowR {
-      0%   { stroke: #3a86ff; }
-      25%  { stroke: #06d6a0; }
-      50%  { stroke: #ffbe0b; }
-      75%  { stroke: #ff006e; }
-      100% { stroke: #3a86ff; }
+      0%   { fill: #ff3b30; opacity: 0.15; }
+      25%  { fill: #ff006e; opacity: 0.2; }
+      50%  { fill: #3a86ff; opacity: 0.15; }
+      75%  { fill: #8338ec; opacity: 0.2; }
+      100% { fill: #ff3b30; opacity: 0.15; }
+    }
+    @keyframes rgbFog {
+      0%   { fill: #ff6666; }
+      33%  { fill: #ff88ff; }
+      66%  { fill: #88ccff; }
+      100% { fill: #ff6666; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .headlight-left, .headlight-right, .headlight-aura-left,
-      .headlight-aura-right, .headlight-glow-left, .headlight-glow-right { animation: none; }
+      .taillight-left, .taillight-right, .taillight-inner-left, .taillight-inner-right,
+      .taillight-glow-left, .taillight-glow-right, .fog-left, .fog-right { animation: none; }
     }
   </style>
-  <!-- Dodge Charger Front View Silhouette -->
+  <!-- Dodge Charger SRT Hellcat Rear View -->
   <defs>
     <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#1a1c24;stop-opacity:0.9"/>
-      <stop offset="50%" style="stop-color:#252830;stop-opacity:0.8"/>
-      <stop offset="100%" style="stop-color:#121319;stop-opacity:0.95"/>
+      <stop offset="0%" style="stop-color:#0a0b0e;stop-opacity:1"/>
+      <stop offset="30%" style="stop-color:#1a1c24;stop-opacity:0.95"/>
+      <stop offset="70%" style="stop-color:#12141a;stop-opacity:0.95"/>
+      <stop offset="100%" style="stop-color:#06070a;stop-opacity:1"/>
     </linearGradient>
-    <radialGradient id="headlightL" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" style="stop-color:#ff006e;stop-opacity:0.9"/>
-      <stop offset="100%" style="stop-color:#ff006e;stop-opacity:0"/>
-    </radialGradient>
-    <radialGradient id="headlightR" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" style="stop-color:#3a86ff;stop-opacity:0.9"/>
-      <stop offset="100%" style="stop-color:#3a86ff;stop-opacity:0"/>
-    </radialGradient>
-    <linearGradient id="hoodGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#2a2c34;stop-opacity:0.7"/>
-      <stop offset="100%" style="stop-color:#1a1c24;stop-opacity:0.5"/>
+    <linearGradient id="roofGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#0e0f14;stop-opacity:0.8"/>
+      <stop offset="100%" style="stop-color:#06070a;stop-opacity:0.9"/>
     </linearGradient>
+    <radialGradient id="glassGrad" cx="50%" cy="30%">
+      <stop offset="0%" style="stop-color:#1a1c24;stop-opacity:0.6"/>
+      <stop offset="100%" style="stop-color:#06070a;stop-opacity:0.95"/>
+    </radialGradient>
   </defs>
 
-  <!-- Car Body Outline -->
-  <path d="M 100 440
-    L 120 380
-    Q 130 340 160 320
-    L 180 300
-    Q 200 280 240 275
-    L 280 270
-    Q 300 255 340 252
-    L 460 252
-    Q 500 255 520 270
-    L 560 275
-    Q 600 280 620 300
-    L 640 320
-    Q 670 340 680 380
-    L 700 440
+  <!-- Car Body - Wide Aggressive Stance -->
+  <path d="M 80 580
+    L 90 520
+    Q 100 450 130 420
+    L 160 390
+    Q 180 360 220 340
+    L 260 320
+    Q 300 280 350 260
+    L 400 250
+    Q 450 240 500 240
+    Q 550 240 600 250
+    L 650 260
+    Q 700 280 740 320
+    L 780 340
+    Q 820 360 840 390
+    L 870 420
+    Q 900 450 910 520
+    L 920 580
     Z" 
-    fill="url(#bodyGrad)" stroke="#3a3c44" stroke-width="1.5" opacity="0.85"/>
+    fill="url(#bodyGrad)" stroke="#2a2c34" stroke-width="1.5" opacity="0.9"/>
 
-  <!-- Hood -->
-  <path d="M 180 300
-    Q 200 280 240 275
-    L 280 270
-    Q 300 255 340 252
-    L 460 252
-    Q 500 255 520 270
-    L 560 275
-    Q 600 280 620 300
-    L 610 340
-    L 190 340
-    Z" 
-    fill="url(#hoodGrad)" opacity="0.6"/>
+  <!-- Roof / Rear Window Area -->
+  <path d="M 260 320 L 300 270 Q 350 250 400 245 L 600 245 Q 650 250 700 270 L 740 320 L 700 300 L 300 300 Z" 
+    fill="url(#roofGrad)" opacity="0.7"/>
 
-  <!-- Hood Lines -->
-  <line x1="300" y1="255" x2="300" y2="335" stroke="#3a3c44" stroke-width="1" opacity="0.3"/>
-  <line x1="500" y1="255" x2="500" y2="335" stroke="#3a3c44" stroke-width="1" opacity="0.3"/>
-  <line x1="400" y1="252" x2="400" y2="335" stroke="#3a3c44" stroke-width="1.5" opacity="0.2"/>
+  <!-- Rear Glass -->
+  <path d="M 320 280 Q 380 260 500 260 Q 620 260 680 280 L 670 310 L 330 310 Z" 
+    fill="url(#glassGrad)" stroke="#1a1c24" stroke-width="1" opacity="0.85"/>
 
-  <!-- Grille (Dodge Crosshair Style) -->
-  <rect x="320" y="340" width="160" height="70" rx="4" fill="#0a0b0e" stroke="#3a3c44" stroke-width="1.5" opacity="0.8"/>
-  <!-- Crosshair -->
-  <line x1="400" y1="345" x2="400" y2="405" stroke="#4a4c54" stroke-width="2" opacity="0.4"/>
-  <circle cx="400" cy="375" r="22" fill="none" stroke="#4a4c54" stroke-width="2" opacity="0.3"/>
-  <circle cx="400" cy="375" r="14" fill="none" stroke="#4a4c54" stroke-width="1.5" opacity="0.25"/>
-  <!-- SRT Badge -->
-  <text x="400" y="380" text-anchor="middle" font-family="sans-serif" font-weight="bold" font-size="14" fill="#e8002c" opacity="0.5">SRT</text>
+  <!-- Trunk Lid Center Line -->
+  <line x1="500" y1="310" x2="500" y2="420" stroke="#2a2c34" stroke-width="1.5" opacity="0.3"/>
 
-  <!-- Left Headlight -->
-  <path d="M 190 310 L 270 310 L 275 340 L 195 340 Z" fill="#1a1c24" stroke="#3a3c44" stroke-width="1" opacity="0.8"/>
-  <ellipse cx="232" cy="325" rx="40" ry="12" fill="url(#headlightL)" class="headlight-left"/>
-  <rect x="195" y="315" width="78" height="18" rx="3" fill="none" stroke="#ff006e" stroke-width="0.5" opacity="0.3" class="headlight-glow-left"/>
+  <!-- Trunk Badge Area (Hellcat/SRT) -->
+  <rect x="460" y="370" width="80" height="25" rx="3" fill="#0a0b0e" opacity="0.6"/>
+  <text x="500" y="387" text-anchor="middle" font-family="sans-serif" font-weight="bold" font-size="14" fill="#e8002c" opacity="0.6">HELLCAT</text>
 
-  <!-- Right Headlight -->
-  <path d="M 530 310 L 610 310 L 605 340 L 525 340 Z" fill="#1a1c24" stroke="#3a3c44" stroke-width="1" opacity="0.8"/>
-  <ellipse cx="568" cy="325" rx="40" ry="12" fill="url(#headlightR)" class="headlight-right"/>
-  <rect x="527" y="315" width="78" height="18" rx="3" fill="none" stroke="#3a86ff" stroke-width="0.5" opacity="0.3" class="headlight-glow-right"/>
+  <!-- Left Taillight Assembly - Horizontal LED Strip -->
+  <g id="taillight-left-assembly">
+    <!-- Outer Housing -->
+    <path d="M 140 420 L 340 420 L 360 480 L 150 480 Z" 
+      fill="#0a0b0e" stroke="#2a2c34" stroke-width="1.5" opacity="0.85"/>
+    
+    <!-- Main LED Strip (Horizontal) -->
+    <rect x="160" y="435" width="180" height="22" rx="2" 
+      class="taillight-left" opacity="0.95"/>
+    
+    <!-- Inner Bright Bar -->
+    <rect x="165" y="439" width="170" height="14" rx="1.5" 
+      class="taillight-inner-left"/>
+    
+    <!-- Glow Effect -->
+    <rect x="150" y="430" width="200" height="35" rx="4" 
+      class="taillight-glow-left"/>
+    
+    <!-- LED Segments (for detail) -->
+    <line x1="200" y1="437" x2="200" y2="455" stroke="#1a1c24" stroke-width="1" opacity="0.3"/>
+    <line x1="240" y1="437" x2="240" y2="455" stroke="#1a1c24" stroke-width="1" opacity="0.3"/>
+    <line x1="280" y1="437" x2="280" y2="455" stroke="#1a1c24" stroke-width="1" opacity="0.3"/>
+    <line x1="320" y1="437" x2="320" y2="455" stroke="#1a1c24" stroke-width="1" opacity="0.3"/>
+  </g>
 
-  <!-- Lower Bumper -->
-  <path d="M 160 410 L 640 410 L 660 440 L 140 440 Z" fill="#0e0f14" stroke="#2a2c34" stroke-width="1" opacity="0.7"/>
+  <!-- Right Taillight Assembly - Horizontal LED Strip -->
+  <g id="taillight-right-assembly">
+    <!-- Outer Housing -->
+    <path d="M 660 420 L 860 420 L 850 480 L 640 480 Z" 
+      fill="#0a0b0e" stroke="#2a2c34" stroke-width="1.5" opacity="0.85"/>
+    
+    <!-- Main LED Strip (Horizontal) -->
+    <rect x="660" y="435" width="180" height="22" rx="2" 
+      class="taillight-right" opacity="0.95"/>
+    
+    <!-- Inner Bright Bar -->
+    <rect x="665" y="439" width="170" height="14" rx="1.5" 
+      class="taillight-inner-right"/>
+    
+    <!-- Glow Effect -->
+    <rect x="650" y="430" width="200" height="35" rx="4" 
+      class="taillight-glow-right"/>
+    
+    <!-- LED Segments (for detail) -->
+    <line x1="700" y1="437" x2="700" y2="455" stroke="#1a1c24" stroke-width="1" opacity="0.3"/>
+    <line x1="740" y1="437" x2="740" y2="455" stroke="#1a1c24" stroke-width="1" opacity="0.3"/>
+    <line x1="780" y1="437" x2="780" y2="455" stroke="#1a1c24" stroke-width="1" opacity="0.3"/>
+    <line x1="820" y1="437" x2="820" y2="455" stroke="#1a1c24" stroke-width="1" opacity="0.3"/>
+  </g>
 
-  <!-- Lower Air Intakes -->
-  <rect x="200" y="415" width="80" height="20" rx="3" fill="#06070a" opacity="0.6"/>
-  <rect x="520" y="415" width="80" height="20" rx="3" fill="#06070a" opacity="0.6"/>
+  <!-- Lower Bumper Valance -->
+  <path d="M 130 480 L 870 480 L 890 540 Q 900 560 910 580 L 90 580 Q 100 560 110 540 Z" 
+    fill="#06070a" stroke="#1a1c24" stroke-width="1.5" opacity="0.8"/>
 
-  <!-- Wheels Hint -->
-  <ellipse cx="140" cy="440" rx="30" ry="8" fill="#0a0b0e" opacity="0.5"/>
-  <ellipse cx="660" cy="440" rx="30" ry="8" fill="#0a0b0e" opacity="0.5"/>
+  <!-- Lower Fog/Reverse Lights -->
+  <ellipse cx="220" cy="520" rx="20" ry="12" class="fog-left" opacity="0.6"/>
+  <ellipse cx="780" cy="520" rx="20" ry="12" class="fog-right" opacity="0.6"/>
 
-  <!-- Headlight Glow Effects -->
-  <ellipse cx="232" cy="325" rx="55" ry="18" fill="#ff006e" opacity="0.06" class="headlight-aura-left"/>
-  <ellipse cx="568" cy="325" rx="55" ry="18" fill="#3a86ff" opacity="0.06" class="headlight-aura-right"/>
+  <!-- Exhaust Tips -->
+  <ellipse cx="280" cy="560" rx="18" ry="14" fill="#2a2c34" stroke="#4a4c54" stroke-width="1.5" opacity="0.7"/>
+  <ellipse cx="320" cy="560" rx="18" ry="14" fill="#2a2c34" stroke="#4a4c54" stroke-width="1.5" opacity="0.7"/>
+  <ellipse cx="680" cy="560" rx="18" ry="14" fill="#2a2c34" stroke="#4a4c54" stroke-width="1.5" opacity="0.7"/>
+  <ellipse cx="720" cy="560" rx="18" ry="14" fill="#2a2c34" stroke="#4a4c54" stroke-width="1.5" opacity="0.7"/>
+
+  <!-- Diffuser Lines -->
+  <line x1="200" y1="540" x2="220" y2="580" stroke="#2a2c34" stroke-width="1" opacity="0.4"/>
+  <line x1="300" y1="540" x2="320" y2="580" stroke="#2a2c34" stroke-width="1" opacity="0.4"/>
+  <line x1="400" y1="540" x2="420" y2="580" stroke="#2a2c34" stroke-width="1" opacity="0.4"/>
+  <line x1="500" y1="540" x2="520" y2="580" stroke="#2a2c34" stroke-width="1" opacity="0.4"/>
+  <line x1="600" y1="540" x2="620" y2="580" stroke="#2a2c34" stroke-width="1" opacity="0.4"/>
+  <line x1="700" y1="540" x2="720" y2="580" stroke="#2a2c34" stroke-width="1" opacity="0.4"/>
+  <line x1="800" y1="540" x2="820" y2="580" stroke="#2a2c34" stroke-width="1" opacity="0.4"/>
+
+  <!-- License Plate Area -->
+  <rect x="420" y="490" width="160" height="40" rx="3" fill="#1a1c24" stroke="#3a3c44" stroke-width="1.5" opacity="0.75"/>
+  <rect x="430" y="498" width="140" height="24" rx="2" fill="#f5f5f7" opacity="0.1"/>
+
+  <!-- Wheel Wells (Suggestion) -->
+  <ellipse cx="180" cy="580" rx="60" ry="15" fill="#06070a" opacity="0.5"/>
+  <ellipse cx="820" cy="580" rx="60" ry="15" fill="#06070a" opacity="0.5"/>
 </svg>
