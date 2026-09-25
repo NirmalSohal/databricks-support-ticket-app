@@ -1,9 +1,6 @@
 import os
-from datetime import datetime
 
 from flask import Flask, render_template, request, redirect, url_for, flash
-from databricks.sdk import WorkspaceClient
-import psycopg
 from psycopg_pool import ConnectionPool
 from psycopg.rows import dict_row
 
@@ -14,35 +11,23 @@ VALID_STATUSES = ["open", "in_progress", "resolved"]
 VALID_PRIORITIES = ["low", "medium", "high"]
 
 # ---------------------------------------------------------------------------
-# Lakebase connection: fresh OAuth token per connection (tokens expire hourly)
+# Lakebase connection: password-based auth
 # ---------------------------------------------------------------------------
-w = WorkspaceClient()
-
-
-class OAuthConnection(psycopg.Connection):
-    @classmethod
-    def connect(cls, conninfo="", **kwargs):
-        endpoint_name = os.environ["ENDPOINT_NAME"]
-        credential = w.postgres.generate_database_credential(endpoint=endpoint_name)
-        kwargs["password"] = credential.token
-        return super().connect(conninfo, **kwargs)
-
 
 username = os.environ["PGUSER"]
+password = os.environ["PGPASSWORD"]
 host = os.environ["PGHOST"]
 port = os.environ.get("PGPORT", "5432")
 database = os.environ["PGDATABASE"]
 sslmode = os.environ.get("PGSSLMODE", "require")
 
 pool = ConnectionPool(
-    conninfo=f"dbname={database} user={username} host={host} port={port} sslmode={sslmode}",
-    connection_class=OAuthConnection,
+    conninfo=f"dbname={database} user={username} password={password} host={host} port={port} sslmode={sslmode}",
     min_size=1,
     max_size=10,
     open=True,
     kwargs={"row_factory": dict_row},
 )
-
 
 # ---------------------------------------------------------------------------
 # Routes
@@ -51,29 +36,50 @@ pool = ConnectionPool(
 @app.route("/")
 def index():
     status_filter = request.args.get("status", "")  # bonus: filter by status
+    search_query = request.args.get("q", "").strip()  # bonus: search by title
 
-    query = "SELECT * FROM tickets"
+    query = """
+        SELECT t.*, (SELECT COUNT(*) FROM ticket_messages tm WHERE tm.ticket_id = t.ticket_id) AS message_count
+        FROM tickets t
+    """
     params = []
+    conditions = []
     if status_filter in VALID_STATUSES:
-        query += " WHERE status = %s"
+        conditions.append("t.status = %s")
         params.append(status_filter)
-    query += " ORDER BY created_at DESC"
+    if search_query:
+        conditions.append("t.title ILIKE %s")
+        params.append(f"%{search_query}%")
+    if conditions:
+        query += " WHERE " + " AND ".join(conditions)
+    query += " ORDER BY t.created_at DESC"
 
     with pool.connection() as conn:
         with conn.cursor() as cur:
             cur.execute(query, params)
             tickets = cur.fetchall()
 
-            # bonus: simple stats
+            # bonus: stats by status
             cur.execute("SELECT status, COUNT(*) AS n FROM tickets GROUP BY status")
             status_counts = {row["status"]: row["n"] for row in cur.fetchall()}
+
+            # bonus: stats by priority
+            cur.execute("SELECT priority, COUNT(*) AS n FROM tickets GROUP BY priority")
+            priority_counts = {row["priority"]: row["n"] for row in cur.fetchall()}
+
+            # total count (unfiltered)
+            cur.execute("SELECT COUNT(*) AS n FROM tickets")
+            total_count = cur.fetchone()["n"]
 
     return render_template(
         "index.html",
         tickets=tickets,
         status_counts=status_counts,
+        priority_counts=priority_counts,
+        total_count=total_count,
         statuses=VALID_STATUSES,
         active_filter=status_filter,
+        search_query=search_query,
     )
 
 

@@ -1,71 +1,119 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Support Tickets</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+<object class="charger-bg" data="{{ url_for('static', filename='charger-bg.svg') }}" type="image/svg+xml"></object>
 <div class="container">
-  <h1>Support Tickets</h1>
-  <p class="muted">Backed by Lakebase (Postgres) via Databricks Apps</p>
+  <div class="header">
+    <h1>Support Tickets</h1>
+    <p class="subtitle"><span class="dot"></span> Hellcat-powered support system &middot; Lakebase (Postgres) &middot; Databricks Apps</p>
+  </div>
 
-  {% with messages = get_flashed_messages(with_categories=true) %}
-    {% for category, msg in messages %}
+  {% with flash_msgs = get_flashed_messages(with_categories=true) %}
+    {% for category, msg in flash_msgs %}
       <div class="flash {{ category }}">{{ msg }}</div>
     {% endfor %}
   {% endwith %}
 
-  <div class="stats">
+  <!-- Stats Dashboard -->
+  <div class="stats-grid">
+    <div class="stat-card total">
+      <div class="stat-value">{{ total_count }}</div>
+      <div class="stat-label">Total</div>
+    </div>
     {% for s in statuses %}
-      <span class="stat-pill">{{ s }}: {{ status_counts.get(s, 0) }}</span>
+      <div class="stat-card {{ s }}">
+        <div class="stat-value">{{ status_counts.get(s, 0) }}</div>
+        <div class="stat-label">{{ s|replace('_', ' ') }}</div>
+      </div>
     {% endfor %}
-    <span class="stat-pill">total: {{ tickets|length if not active_filter else status_counts.values()|sum }}</span>
   </div>
 
-  <div class="filters">
-    <a href="{{ url_for('index') }}" class="{{ 'active' if not active_filter }}">All</a>
-    {% for s in statuses %}
-      <a href="{{ url_for('index', status=s) }}" class="{{ 'active' if active_filter == s }}">{{ s }}</a>
+  <!-- Priority Breakdown -->
+  <div class="priority-stats">
+    {% for p in ['low', 'medium', 'high'] %}
+      <span class="priority-stat">
+        <span class="dot {{ p }}"></span>
+        {{ p }}: {{ priority_counts.get(p, 0) }}
+      </span>
     {% endfor %}
   </div>
 
+  <!-- Toolbar: Filters + Search -->
+  <div class="toolbar">
+    <div class="filters">
+      <a href="{{ url_for('index') }}" class="{{ 'active' if not active_filter }}">All</a>
+      {% for s in statuses %}
+        <a href="{{ url_for('index', status=s) }}" class="{{ 'active' if active_filter == s }}">{{ s|replace('_', ' ') }}</a>
+      {% endfor %}
+    </div>
+    <div class="search-box">
+      <span class="search-icon">⌕</span>
+      <input type="text" name="q" value="{{ search_query or '' }}" placeholder="Search tickets..." form="searchForm">
+    </div>
+  </div>
+  <form id="searchForm" method="GET" action="{{ url_for('index') }}" style="display:none;"></form>
+
+  <!-- Ticket List -->
   <ul class="ticket-list">
     {% for t in tickets %}
       <li>
         <a class="ticket-row" href="{{ url_for('view_ticket', ticket_id=t.ticket_id) }}">
-          <span>
-            #{{ t.ticket_id }} — {{ t.title }}
-            <span class="priority">[{{ t.priority }}{% if t.category %} · {{ t.category }}{% endif %}]</span>
-          </span>
-          <span class="badge {{ t.status }}">{{ t.status }}</span>
+          <div class="ticket-info">
+            <span class="ticket-title">#{{ t.ticket_id }} — {{ t.title }}</span>
+            <span class="ticket-meta">
+              <span class="priority-tag"><span class="dot {{ t.priority }}"></span>{{ t.priority }}</span>
+              {% if t.category %}<span class="category-tag">{{ t.category }}</span>{% endif %}
+              <span class="sep">·</span>
+              <span>{{ t.created_by }}</span>
+              <span class="sep">·</span>
+              <span>{{ t.created_at.strftime('%b %d, %H:%M') }}</span>
+            </span>
+          </div>
+          <div class="ticket-right">
+            <span class="message-count">{{ t.message_count or 0 }} messages</span>
+            <span class="badge {{ t.status }}">{{ t.status|replace('_', ' ') }}</span>
+          </div>
         </a>
       </li>
     {% else %}
-      <p class="muted">No tickets found.</p>
+      <div class="empty-state">
+        <p>No tickets found.{% if active_filter or search_query %} Try changing your filters.{% endif %}</p>
+      </div>
     {% endfor %}
   </ul>
 
+  <!-- Create Ticket Card -->
   <div class="card">
-    <h2>Create a new ticket</h2>
+    <h2>Create a New Ticket</h2>
     <form method="POST" action="{{ url_for('create_ticket') }}">
       <label>Title</label>
-      <input type="text" name="title" required>
+      <input type="text" name="title" required placeholder="Brief summary of the issue">
 
-      <label>Your name / email</label>
-      <input type="text" name="created_by" required>
+      <div class="form-row">
+        <div>
+          <label>Your name / email</label>
+          <input type="text" name="created_by" required placeholder="e.g. alice@company.com">
+        </div>
+        <div>
+          <label>Category (optional)</label>
+          <input type="text" name="category" placeholder="network, hardware, access...">
+        </div>
+      </div>
 
       <label>Priority</label>
       <select name="priority">
-        <option value="low">low</option>
-        <option value="medium" selected>medium</option>
-        <option value="high">high</option>
+        <option value="low">Low</option>
+        <option value="medium" selected>Medium</option>
+        <option value="high">High</option>
       </select>
 
-      <label>Category (optional)</label>
-      <input type="text" name="category" placeholder="e.g. network, hardware, access">
-
-      <button type="submit">Create ticket</button>
+      <button type="submit">Create Ticket</button>
     </form>
   </div>
 </div>

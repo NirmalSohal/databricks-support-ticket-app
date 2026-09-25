@@ -1,63 +1,88 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Ticket #{{ ticket.ticket_id }}</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+<object class="charger-bg" data="{{ url_for('static', filename='charger-bg.svg') }}" type="image/svg+xml"></object>
 <div class="container">
-  <a class="back-link" href="{{ url_for('index') }}">&larr; All tickets</a>
+  <a class="back-link" href="{{ url_for('index') }}">← All tickets</a>
 
-  {% with messages = get_flashed_messages(with_categories=true) %}
-    {% for category, msg in messages %}
+  {% with flash_msgs = get_flashed_messages(with_categories=true) %}
+    {% for category, msg in flash_msgs %}
       <div class="flash {{ category }}">{{ msg }}</div>
     {% endfor %}
   {% endwith %}
 
+  <!-- Ticket Details Card -->
   <div class="card">
-    <h1>#{{ ticket.ticket_id }} — {{ ticket.title }}</h1>
-    <p class="muted">
-      Created by {{ ticket.created_by }} on {{ ticket.created_at.strftime('%Y-%m-%d %H:%M') }}
-      &middot; priority: {{ ticket.priority }}
-      {% if ticket.category %}&middot; category: {{ ticket.category }}{% endif %}
-    </p>
-    <span class="badge {{ ticket.status }}">{{ ticket.status }}</span>
+    <div class="ticket-header">
+      <div>
+        <h1>#{{ ticket.ticket_id }} — {{ ticket.title }}</h1>
+        <div class="ticket-meta-row">
+          <span>{{ ticket.created_by }}</span>
+          <span class="sep">·</span>
+          <span>{{ ticket.created_at.strftime('%b %d, %Y at %H:%M') }}</span>
+          <span class="sep">·</span>
+          <span class="priority-tag"><span class="dot {{ ticket.priority }}"></span>{{ ticket.priority }} priority</span>
+          {% if ticket.category %}
+            <span class="sep">·</span>
+            <span class="category-tag">{{ ticket.category }}</span>
+          {% endif %}
+        </div>
+      </div>
+      <span class="badge {{ ticket.status }}">{{ ticket.status|replace('_', ' ') }}</span>
+    </div>
 
-    <form method="POST" action="{{ url_for('update_status', ticket_id=ticket.ticket_id) }}" style="margin-top:1rem;">
-      <label>Update status</label>
-      <select name="status">
-        {% for s in statuses %}
-          <option value="{{ s }}" {{ 'selected' if s == ticket.status }}>{{ s }}</option>
-        {% endfor %}
-      </select>
-      <button type="submit">Update status</button>
-    </form>
+    <!-- Status Update + Delete -->
+    <div class="action-bar">
+      <form method="POST" action="{{ url_for('update_status', ticket_id=ticket.ticket_id) }}" class="status-update-row" style="flex:1;">
+        <div>
+          <label>Update status</label>
+          <select name="status">
+            {% for s in statuses %}
+              <option value="{{ s }}" {{ 'selected' if s == ticket.status }}>{{ s|replace('_', ' ') }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <button type="submit">Update</button>
+      </form>
 
-    <form method="POST" action="{{ url_for('delete_ticket', ticket_id=ticket.ticket_id) }}"
-          onsubmit="return confirm('Delete ticket #{{ ticket.ticket_id }}? This cannot be undone.');"
-          style="margin-top:.75rem;">
-      <button type="submit" class="danger">Delete ticket</button>
-    </form>
+      <form method="POST" action="{{ url_for('delete_ticket', ticket_id=ticket.ticket_id) }}"
+            onsubmit="return confirm('Delete ticket #{{ ticket.ticket_id }}? This cannot be undone.');">
+        <button type="submit" class="danger">Delete</button>
+      </form>
+    </div>
   </div>
 
+  <!-- Messages Thread -->
   <div class="card">
-    <h2>Messages</h2>
-    {% for m in messages %}
-      <div class="message">
-        <div class="meta">{{ m.author }} &middot; {{ m.created_at.strftime('%Y-%m-%d %H:%M') }}</div>
-        <div>{{ m.message_text }}</div>
-      </div>
-    {% else %}
-      <p class="muted">No messages yet.</p>
-    {% endfor %}
+    <h2>Messages <span style="font-size:.9rem;font-weight:400;color:var(--muted)">({{ messages|length }})</span></h2>
+    <div class="messages-list">
+      {% for m in messages %}
+        <div class="message">
+          <div class="meta">
+            <span class="author">{{ m.author }}</span>
+            <span class="timestamp">· {{ m.created_at.strftime('%b %d, %H:%M') }}</span>
+          </div>
+          <div class="message-body">{{ m.message_text }}</div>
+        </div>
+      {% else %}
+        <div class="empty-state">
+          <p>No messages yet. Start the conversation below.</p>
+        </div>
+      {% endfor %}
+    </div>
 
-    <form method="POST" action="{{ url_for('add_message', ticket_id=ticket.ticket_id) }}" style="margin-top:1rem;">
+    <form method="POST" action="{{ url_for('add_message', ticket_id=ticket.ticket_id) }}">
       <label>Your name / email</label>
-      <input type="text" name="author" required>
+      <input type="text" name="author" required placeholder="e.g. support@company.com">
       <label>Message</label>
-      <textarea name="message_text" rows="3" required></textarea>
-      <button type="submit">Add message</button>
+      <textarea name="message_text" rows="3" required placeholder="Type your message here..."></textarea>
+      <button type="submit">Add Message</button>
     </form>
   </div>
 </div>

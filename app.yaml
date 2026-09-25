@@ -2,16 +2,16 @@ command: ['flask', '--app', 'app.py', 'run', '--host', '0.0.0.0', '--port', '800
 
 env:
   - name: PGHOST
-    value: '<your-endpoint-hostname>'          # e.g. ep-xyz.database.us-west-2.dev.databricks.com
+    value: 'ep-morning-waterfall-d8ayddnp.database.us-east-2.cloud.databricks.com'
   - name: PGDATABASE
     value: 'databricks_postgres'
   - name: PGUSER
-    value: '<DATABRICKS_CLIENT_ID>'             # from the App's Environment tab
+    value: 'Nirmal'
+  - name: PGPASSWORD
+    value: 'npg_uLcnGkpS98OC'
   - name: PGPORT
     value: '5432'
   - name: PGSSLMODE
     value: 'require'
-  - name: ENDPOINT_NAME
-    value: 'projects/<project-id>/branches/<branch-id>/endpoints/<endpoint-id>'
   - name: FLASK_SECRET_KEY
     value: 'change-this-to-a-random-string'
